@@ -49,9 +49,9 @@ const showPokemon = (responsePokemon) => {
           </div>
      `;
 };
-if(localStorage.getItem('pokedesk')){
+if(localStorage.getItem('pokedex')){
      errorMessage.classList.add('d-none');
-     const pokemonLocal = localStorage.getItem('pokedesk');
+     const pokemonLocal = localStorage.getItem('pokedex');
      showPokemon(JSON.parse(pokemonLocal));
 }else {
      welcomeModal.show();
@@ -73,7 +73,7 @@ const pokeSearch = async (search) => {
                     data['stats'],
                     data['sprites']['other'],
                );
-               localStorage.setItem('pokedesk',JSON.stringify(resultPokemon));
+               localStorage.setItem('pokedex',JSON.stringify(resultPokemon));
                results.classList.remove('d-none');
                showPokemon(resultPokemon);
                return resultPokemon;

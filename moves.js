@@ -25,7 +25,7 @@ const showMoves = (pokemon) => {
      `;
 };
 const NoPokemonModal = new bootstrap.Modal(document.getElementById('staticBackdrop'),{keyboard: false});
-if(localStorage.getItem("pokedesk")){
-     const initialState = localStorage.getItem("pokedesk");
+if(localStorage.getItem("pokedex")){
+     const initialState = localStorage.getItem("pokedex");
      showMoves(JSON.parse(initialState));
 }else NoPokemonModal.show();

@@ -1,0 +1,98 @@
+#LoadingComponent {
+     width: auto;
+     width: 0px auto;
+     height: 350px;
+     display: flex;
+     align-items: center;
+}
+#LoadingComponent #moving-container {
+     width: 10em;
+     height: 10em;
+     margin: 10px auto 70px;
+     position: relative;
+     animation: translating 5s infinite;
+}
+@keyframes translating {
+     0% {
+          transform: translateX(-50%);
+     }
+     50% {
+          transform: translateX(50%);
+     }
+     100% {
+          transform: translateX(-50%);
+     }
+}
+#LoadingComponent #pokeball-container {
+     width: 10em;
+     height: 10em;
+     margin: 20px auto;
+     animation: spinning 5s infinite;
+}
+@keyframes spinning {
+     0% {
+          transform: rotate(-45deg);
+     }
+     50% {
+          transform: rotate(325deg);
+     }
+     100% {
+          transform: rotate(-45deg);
+     }
+}
+#LoadingComponent #pokeball {
+     width: 10em;
+     height: 10em;
+     background-color:#fff;
+     border-radius: 50%;
+     position: relative;
+     overflow: hidden;
+}
+#LoadingComponent #pokeball::before {
+     content: "";
+     position: absolute;
+     width: 10em;
+     height: 5em;
+     background-color:red;
+     border-radius: 4em 5em 0em 0em;
+}
+#LoadingComponent #pokeball .pokeball-details {
+     position: absolute;
+     top: 4.5em;
+     width: 10em;
+     height: 1em;
+     background-color:#333;
+}
+#LoadingComponent #pokeball .pokeball-details::before {
+     content: "";
+     position: absolute;
+     top: -1.25em;
+     left: 3.25em;
+     z-index: 200;
+     width: 3.5em;
+     height: 3.5em;
+     border-radius: 50%;
+     background-color:#333;
+}
+#LoadingComponent #pokeball .pokeball-details::after {
+     content: "";
+     position: absolute;
+     top: -0.45em;
+     left: 4.10em;
+     z-index: 250;
+     width: 1.8em;
+     height: 1.8em;
+     border: 0.3em solid white;
+     border-radius: 50%;
+     background-color:#fff;
+     margin: 0em auto;
+     animation: color-change 3s infinite;
+}
+@keyframes color-change {
+     0%,20%,40%,60%,100% {
+          background-color:#fff;
+     }
+     10%,30%,50%,70%,90% {
+          background-color:#f00;
+     }
+}

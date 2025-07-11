@@ -1,95 +1,135 @@
-const results = document.querySelector('#results');
-const LoadingComponent = document.querySelector('#LoadingComponent');
-const search = document.querySelector('#search');
-const searchForm = document.querySelector('#searchForm');
-const errorMessage = document.querySelector('#errorMessage');
-const welcomeModal = new bootstrap.Modal(document.getElementById('welcomeModal'),{keyboard: false});
-const URL = 'https://pokeapi.co/api/v2/pokemon/';
-class pokeResult {
-     constructor(name,type,abilities,movements,stats,sprite){
-          this.Name = name;
-          this.Type = type;
-          this.Abilities = abilities;
-          this.Movements = movements;
-          this.Stats = stats;
-          this.sprite = sprite;
-     }
+let buttons = document.querySelectorAll('button');
+let buttonSearch = document.getElementById('buttonSearch');
+let buttonRight = document.getElementById('buttonRight');
+let buttonLeft = document.getElementById('buttonLeft');
+let buttonUp = document.getElementById('buttonUp');
+let buttonSwitch = document.getElementById('buttonSwitch');
+let screen = document.getElementById('poke-image');
+let audio = document.getElementById('audio');
+let pokeName = document.getElementById('poke-name');
+let pokeInput = document.getElementById('poke-input');
+let pokeID = document.getElementById('poke-id');
+let infoType = document.getElementById('info-type');
+let infoHP = document.getElementById('info-hp');
+let infoSPEED = document.getElementById('info-speed');
+let infoATTACK = document.getElementById('info-attack');
+let infoDEFENSE = document.getElementById('info-defense');
+let index = 0;
+let evolutionPhase = 0;
+function init(){
+     index = 0;
+     pokeName.innerText = 'Who am i?';
+     pokeID.innerText = '00';
+     infoType.innerText = '';
+     infoHP.innerText = '';
+     infoSPEED.innerText = '';
+     infoATTACK.innerText = '';
+     infoDEFENSE.innerText = '';
+     screen.src = './images/bras.png';
+     pokeInput.value = '';
+     buttonLeft.style.color = 'grey';
+     buttonUp.style.color = 'grey';
+     buttonDown.style.color = 'grey';
+     buttonUp.disabled = true;
+     buttonDown.disabled = true;
+     buttonLeft.disabled = true;
 }
-const showImaginePokemon = (spriteData) => {
-     if(!spriteData.dream_world.front_default && !spriteData.home.front_default){
-          return spriteData['official-artwork'].front_default;
-     }else if(!spriteData.dream_world.front_default){
-          return spriteData.home.front_default;
-     }else {
-          return spriteData.dream_world.front_default;
-     }
-};
-const showStats = (listStats) => {
-     const nameStat = listStats.stat.name;
-     const valorStat = listStats.base_stat;
-     return `<li class="list-group-item border-danger d-flex align-items-start justify-content-between fw-bold">
-          ${nameStat}: <span class="fw-light">${valorStat}</span>
-     </li>`
-};
-const showPokemon = (responsePokemon) => {
-     results.innerHTML = `
-          <img src=${showImaginePokemon(responsePokemon.sprite)} class="card-img-top" alt="Pokemon Actual">
-          <div class="card-body">
-               <h4 class="card-title text-center" id="name">${responsePokemon.Name.toUpperCase()}</h4>
-          </div>
-          <ul class="list-group list-group-flush" id="stats">
-               <li class="list-group-item border-danger d-flex justify-content-around align-items-start fw-bold">
-                    type <span class="badge rounded-pill bg-dark">${responsePokemon.Type}</span>
-               </li>
-               ${responsePokemon.Stats.map(element => showStats(element)).join("")}
-          </ul>
-          <div class="card-body bg-dark d-flex justify-content-evenly">
-               <a href="./moves.html" class="card-link text-decoration-none text-capitalize link-light fw-bold"><i class="bi bi-person-lines-fill"></i> moves</a>
-               <a href="./abilities.html" class="card-link text-decoration-none text-capitalize link-light fw-bold">abilities <i class="bi bi-stars"></i></a>
-          </div>
-     `;
-};
-if(localStorage.getItem('pokedex')){
-     errorMessage.classList.add('d-none');
-     const pokemonLocal = localStorage.getItem('pokedex');
-     showPokemon(JSON.parse(pokemonLocal));
-}else {
-     welcomeModal.show();
-     results.classList.add('d-none');
+init();
+buttonSwitch.addEventListener('click',init);
+function displayPokemonInfo(pokemonInfo){
+     pokeName.innerText = pokemonInfo.name.toUpperCase();
+     screen.src = pokemonInfo.sprites.front_default;
+     pokeID.innerText = pokemonInfo.id < 10 ? `0${pokemonInfo.id}` : `${pokemonInfo.id}`;
+     infoType.innerText = `Type: ${pokemonInfo.types[0].type.name}`;
+     infoHP.innerText = `Health: ${pokemonInfo.stats[5].stat.name,pokemonInfo.stats[5].base_stat}`;
+     infoSPEED.innerText = `Speed: ${pokemonInfo.stats[0].stat.name,pokemonInfo.stats[0].base_stat}`;
+     infoATTACK.innerText = `Attack: ${pokemonInfo.stats[3].stat.name,pokemonInfo.stats[3].base_stat}`;
+     infoDEFENSE.innerText = `Defense: ${pokemonInfo.stats[4].stat.name,pokemonInfo.stats[4].base_stat}`;
 }
-const pokeSearch = async (search) => {
-     const endPoint = `${URL}${search}`;
+async function searchPokemonInfo(pokemonName){
      try {
-          errorMessage.classList.add('d-none');
-          LoadingComponent.classList.remove('d-none');
-          const response = await fetch(endPoint);
-          if(response.ok){
-               const data = await response.json();
-               const resultPokemon = new pokeResult(
-                    data.name,
-                    data['types'][0]['type'].name,
-                    data['abilities'],
-                    data['moves'],
-                    data['stats'],
-                    data['sprites']['other'],
-               );
-               localStorage.setItem('pokedex',JSON.stringify(resultPokemon));
-               results.classList.remove('d-none');
-               showPokemon(resultPokemon);
-               return resultPokemon;
-          }
+          const API = 'https://pokeapi.co/api/v2/pokemon';
+          const response = await fetch(`${API}/${pokemonName}`);
+          const data = await response.json();
+          displayPokemonInfo(data);
      }catch(error){
-          errorMessage.textContent = error;
-     }finally {
-          LoadingComponent.classList.add('d-none');
+          pokemonName.innerText = (error.message);
+          index = parseInt(pokeID.innerText);
      }
-};
-const PatternPokemon = /((^\d{1,4}$)|(^[A-Za-z]{3,})$)/;
-searchForm.addEventListener('submit',(event) => {
-     event.preventDefault();
-     const toSearch = search.value.trim().toLowerCase();
-     if(toSearch.trim() === "") return;
-     if(!PatternPokemon.test(toSearch)) return;
-     pokeSearch(toSearch);
-     search.value = "";
+}
+async function searchPokemonEvolution(number){
+     try {
+          if(index <= 0) init();
+          const APIEvolution = 'https://pokeapi.co/api/v2/evolution-chain';
+          const responseEvolution = await fetch(`${APIEvolution}/${index}`);
+          const dataEvolution = await responseEvolution.json();
+          switch(number){
+               case 0:
+                    evolution = dataEvolution.chain.species.name;
+                    break;
+               case 1:
+                    evolution = dataEvolution.chain.evolves_to[0].species.name;
+                    break;
+               case 2:
+                    evolution = dataEvolution.chain.evolves_to[0].evolves_to[0].species.name;
+                    break;
+          }
+          searchPokemonInfo(evolution);
+     }catch(error){
+          console.log(error,'Index < 0');
+     }
+}
+buttonSearch.addEventListener('click',() => {
+     if(pokeInput.value == ""){
+          pokeName.innerText = 'Zzz..... name?';
+     }else if(pokeInput.value == 'praseidimio' || pokeInput.value == 'tremotino'){
+          pokeName.innerText = 'Erica BLENDER!';
+          screen.src = './images/blender.jpg';
+          buttonLeft.style.color = 'burlywood';
+          buttonUp.style.color = 'grey';
+          buttonDown.style.color = 'grey';
+          buttonUp.disabled = true;
+          buttonDown.disabled = true;
+          buttonLeft.disabled = false;
+     }else {
+          pokemonName = pokeInput.value.toUpperCase();
+          searchPokemonInfo(pokemonName);
+          index = 0;
+          buttonUp.style.color = 'grey';
+          buttonDown.style.color = 'grey';
+          buttonLeft.style.color = 'grey';
+          buttonUp.disabled = true;
+          buttonDown.disabled = true;
+          buttonLeft.disabled = true;
+     }
+});
+buttonRight.addEventListener('click',() => {
+     index += 1;
+     evolutionPhase = 0;
+     searchPokemonEvolution(0);
+     pokeInput.value = "";
+     buttonLeft.style.color = 'burlywood';
+     buttonUp.style.color = 'burlywood';
+     buttonDown.style.color = 'burlywood';
+     buttonUp.disabled = false;
+     buttonDown.disabled = false;
+     buttonLeft.disabled = false;
+});
+buttonLeft.addEventListener('click',() => {
+     index -= 1;
+     evolutionPhase = 0;
+     searchPokemonEvolution(0);
+});
+buttonUp.addEventListener('click',() => {
+     if(evolutionPhase >= 2) evolutionPhase = 2;
+     else evolutionPhase += 1;
+     searchPokemonEvolution(evolutionPhase);
+});
+buttonDown.addEventListener('click',() => {
+     if(evolutionPhase <= 0) evolutionPhase = 0;
+     else evolutionPhase -= 1;
+     searchPokemonEvolution(evolutionPhase);
+});
+buttons.forEach(element => {
+     element.addEventListener('click',() => audio.play());
 });

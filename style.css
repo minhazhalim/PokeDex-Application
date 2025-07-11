@@ -1,98 +1,115 @@
-#LoadingComponent {
-     width: auto;
-     width: 0px auto;
-     height: 350px;
-     display: flex;
-     align-items: center;
+body {
+     font-family: monospace;
+     background-color:#2e2329;
 }
-#LoadingComponent #moving-container {
-     width: 10em;
-     height: 10em;
-     margin: 10px auto 70px;
+button {
+     border: none;
+     outline: none !important;
+     background: none;
+}
+input {
+     border-radius: 5px;
+}
+.container {
+     max-width: 350px;
+}
+.container .main {
      position: relative;
-     animation: translating 5s infinite;
 }
-@keyframes translating {
-     0% {
-          transform: translateX(-50%);
-     }
-     50% {
-          transform: translateX(50%);
-     }
-     100% {
-          transform: translateX(-50%);
-     }
-}
-#LoadingComponent #pokeball-container {
-     width: 10em;
-     height: 10em;
-     margin: 20px auto;
-     animation: spinning 5s infinite;
-}
-@keyframes spinning {
-     0% {
-          transform: rotate(-45deg);
-     }
-     50% {
-          transform: rotate(325deg);
-     }
-     100% {
-          transform: rotate(-45deg);
-     }
-}
-#LoadingComponent #pokeball {
-     width: 10em;
-     height: 10em;
-     background-color:#fff;
-     border-radius: 50%;
-     position: relative;
-     overflow: hidden;
-}
-#LoadingComponent #pokeball::before {
-     content: "";
+.container .main .info {
      position: absolute;
-     width: 10em;
-     height: 5em;
-     background-color:red;
-     border-radius: 4em 5em 0em 0em;
+     top: 81%;
+     left: 8%;
 }
-#LoadingComponent #pokeball .pokeball-details {
+.container .main .info h6 {
+     font-size: small;
+     font-weight: bold;
+}
+#poke-title {
      position: absolute;
-     top: 4.5em;
-     width: 10em;
-     height: 1em;
-     background-color:#333;
+     top: 12%;
+     left: 45%;
+     width: 150px;
 }
-#LoadingComponent #pokeball .pokeball-details::before {
-     content: "";
+#poke-input {
      position: absolute;
-     top: -1.25em;
-     left: 3.25em;
-     z-index: 200;
-     width: 3.5em;
-     height: 3.5em;
-     border-radius: 50%;
-     background-color:#333;
+     top: 63%;
+     left: 23%;
+     width: 50%;
 }
-#LoadingComponent #pokeball .pokeball-details::after {
-     content: "";
+#PokeDex {
+     border-radius: 10px;
+     width: 350px;
+}
+#poke-id {
      position: absolute;
-     top: -0.45em;
-     left: 4.10em;
-     z-index: 250;
-     width: 1.8em;
-     height: 1.8em;
-     border: 0.3em solid white;
-     border-radius: 50%;
-     background-color:#fff;
-     margin: 0em auto;
-     animation: color-change 3s infinite;
+     top: 7%;
+     left: 11%;
+     font-weight: bold;
 }
-@keyframes color-change {
-     0%,20%,40%,60%,100% {
-          background-color:#fff;
-     }
-     10%,30%,50%,70%,90% {
-          background-color:#f00;
-     }
+#poke-name {
+     position: absolute;
+     top: 53%;
+     left: 30%;
+     font-size: small;
+     font-weight: bold;
+     letter-spacing: 2px;
+}
+#poke-image {
+     position: absolute;
+     top: 27%;
+     left: 28%;
+     width: 150px;
+     height: auto;
+     padding-top: 5px;
+}
+#buttonSearch {
+     position: absolute;
+     top: 70%;
+     left: 32%;
+     color:black;
+     text-transform: uppercase;
+}
+#buttonSearch img {
+     width: 35px;
+     position: absolute;
+     top: 73%;
+     left: 20%;
+}
+#buttonRight {
+     position: absolute;
+     top: 73.3%;
+     left: 83.5%;
+     color:burlywood;
+}
+#buttonLeft {
+     position: absolute;
+     top: 73.3%;
+     left: 69%;
+     color:burlywood;
+}
+#buttonUp {
+     position: absolute;
+     top: 69.2%;
+     left: 76.2%;
+     color:burlywood;
+}
+#buttonDown {
+     position: absolute;
+     top: 77.2%;
+     left: 76.2%;
+     color:burlywood;
+}
+#buttonSwitch {
+     position: absolute;
+     top: 62%;
+     left: 8%;
+}
+#buttonSwitch:active,#buttonSearch:active {
+     transform: scale(1.1);
+}
+footer {
+     text-align: center;
+     padding-top: 30px;
+     color:burlywood;
 }
